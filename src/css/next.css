@@ -1,0 +1,115 @@
+
+/* @import 'normalize.css'; */
+
+/* media query ranges */
+
+@media (width < 480px) {
+  body {
+    background-color: lightblue;
+    color: blue;
+  }
+}
+
+@media (480px <= width < 768px) {
+  body {
+    background-color: lightgrey;
+    color: grey;
+  }
+}
+
+@media (width >= 768px) {
+  body {
+    background-color: lightgreen;
+    color: green;
+  }
+}
+
+:root {
+  --mainColor: #999;
+}
+
+.size{
+    --sColor: #FAA;
+    color: var(--sColor);
+}
+
+body {
+  font-family: system-ui;
+  background: var(--mainColor)
+}
+
+@custom-media --viewport-medium (width <= 50rem);
+@custom-selector :--heading h1, h2, h3, h4, h5, h6;
+
+:--heading {
+  background-image: image-set(url(../imgs/fcar.png) 1x, url(../imgs/down.png) 2x);
+  background-repeat: no-repeat;
+
+  @media (--viewport-medium) {
+    margin-block: 0;
+  }
+}
+
+a {
+  color: rgb(0 0 100% / 90%);
+  break-inside: avoid;
+  break-before: avoid-column;
+  break-after: always;
+
+  &:hover {
+    color: rebeccapurple;
+  }
+}
+
+
+.link {
+  color: color(green alpha(-10%));
+}
+
+
+.article {
+  & img {
+    filter: grayscale(0.9);
+  }
+}
+
+/* Testing autoprefixer */
+.box {
+  display: flex;
+  justify-content: center;
+
+  & .tile{
+    font-size: 20px;
+  }
+
+  & span{
+    color:red;
+  }
+}
+
+/* HSL 即色相、饱和度、亮度（英语：Hue, Saturation, Lightness） */
+em {
+  background-color: hsl(120deg 100% 25%);
+  box-shadow: 0 0 0 10px hwb(120deg 100% 25% / 80%);
+  color: rgb(0 255 0);
+}
+
+
+p {
+  color: gray(50);
+}
+
+.grid{
+  display: grid;
+  /* height: 200px; */
+  /* grid-template-columns: 200px;
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 20px; */
+
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  gap: 20px 5px;
+
+  & div{
+    background-color: lime;
+  }
+}

@@ -1,0 +1,58 @@
+
+html {
+
+  body {
+      margin-right: auto;
+      margin-left: auto;
+      min-width: 1080px;
+      max-width: 1920px;
+  }
+
+  @media screen and (max-width: 1279px) {
+      font-size: 12px;
+  }
+
+  @media screen and (min-width:1280px) and (max-width:1439px){
+      font-size: 14px;
+  }
+
+  @media screen and (min-width: 1440px) {
+      font-size: 16px;
+  }
+
+}
+
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,span,fieldset,legend,button,input,textarea,th,td{margin:0;padding:0;}
+em,strong,th,i{font-style:normal;font-weight:normal;}
+h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
+a{text-decoration:none;cursor:pointer;outline:none;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul,li{list-style:none;}
+fieldset,img{border:0;}
+button{border: none;outline:0;}
+
+b{font-weight: normal;}
+
+/*basic end*/
+.clearfix:before,
+.clearfix:after{
+  content: " ";
+  display: table;
+}
+.clearfix:after{
+  clear: both;
+}
+.clearfix{
+  *zoom: 1;
+}
+
+.fl{
+  float: left;
+}
+.fr{
+  float: right;
+}
+
+.pointer{
+  cursor: pointer;
+}

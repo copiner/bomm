@@ -1,0 +1,25 @@
+/*
+一个冒号是伪类，两个冒号是伪元素
+伪类有：:first-child ，:link:，vistited，:hover:，active:focus，:lang
+伪元素有：::first-line，::first-letter，::before，::after
+*/
+.error-tip::after {
+  position: fixed;
+  margin-top:-5px;
+  top: 32px;
+  left: 30%;
+  width: 40%;
+  font-size:20px;
+  line-height:60px;
+  color: #FFF;
+  background: rgba(0, 0, 0, .7);
+  content: attr(data-msg);
+  border-radius: 6px;
+  text-align: center;
+  z-index: 999;
+}
+
+
+a {
+  all: initial;
+}
