@@ -235,7 +235,7 @@ task('server',series('clean','watch',parallel('config','lib','css','js_bro','ima
         middleware: function(connect, opt) {
             return [
                 proxy('/api',  {
-                    target: 'http://192.168.23.239:8080/',
+                    target: '',
                     changeOrigin:true,
                     headers: {
                          "Connection": "keep-alive"
