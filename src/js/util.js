@@ -29,6 +29,15 @@ const Util = {
     return uuid;
   },
 
+  url2url : function(url){
+    if(url.indexOf('?') > 0){
+      url+='&random='+Math.random();
+    } else {
+      url+='?random='+Math.random();
+    }
+    window.location.href = url;
+  },
+
   // 提示信息
   timer:null,
   showMessage:function(message){
