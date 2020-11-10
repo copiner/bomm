@@ -1,14 +1,11 @@
 /*
 Written by wdaonngg@gmail.com in 2020-06-09
 
-posthtml
 postcss
 babel
 */
-
 const { src, dest, task, series, parallel, watch, lastRun } = require('gulp');
 const { resolve } = require("path");
-const sourcemaps = require('gulp-sourcemaps');
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
@@ -29,18 +26,16 @@ const ppEnv = require('postcss-preset-env');
 const autoprefixer  = require('autoprefixer');
 const cssnano = require('cssnano');
 
-//posthtml
-const posthtml = require("gulp-posthtml");
-const posthtmlcm = require("posthtml-css-modules");
-const pxtorem = require('postcss-pxtorem');
-const tap = require('gulp-tap');
-const modules = require('postcss-modules');
+
+//const pxtorem = require('postcss-pxtorem');
 
 //browserify
 const browserify = require('browserify');
 const source = require('vinyl-source-stream');
-// const buffer = require('vinyl-buffer');
+const buffer = require('vinyl-buffer');
 const glob = require('glob');
+const sourcemaps = require('gulp-sourcemaps');
+
 const rename = require('gulp-rename');
 
 const concat = require('gulp-concat');
@@ -63,12 +58,6 @@ task('scripts', function(cb) {
 
 task('html', function (cb) {
 
-    let plugins  = [
-      posthtmlcm('./src/css/htl.css.json')
-     ];
-
-    let options = {}
-
     let opt = {
         removeComments: true,//清除HTML注释
         collapseWhitespace: true,//压缩HTML
@@ -82,7 +71,6 @@ task('html', function (cb) {
         prefix: '@@',
         basepath: '@file'
       }))
-    // .pipe(posthtml(plugins, options))
     .pipe(gulpif(pro, htmlmin(opt)))
     .pipe(dest('dist/'))
     .pipe(connect.reload());
@@ -111,7 +99,7 @@ task('config', function (cb) {
 task('image_min', function (cb) {
     src('src/imgs/*')
     .pipe(plumber())
-    .pipe(gulpif(pro, imagemin()))
+    //.pipe(gulpif(pro, imagemin()))
     .pipe(dest('dist/imgs'));
     cb();
 });
@@ -126,17 +114,9 @@ task('css', function (cb) {
         'nesting-rules': true
       }
     }),
-    // modules({
-    //   getJSON: function (cssFileName, json, outputFileName) {
-    //     var path = require("path");
-    //     var cssName = path.basename(cssFileName, ".css");
-    //     var jsonFileName = path.resolve("./build/" + cssName + ".json");
-    //     fs.writeFileSync(jsonFileName, JSON.stringify(json));
-    //   },
-    // })
-    pxtorem({
-      replace: false
-     }),
+    // pxtorem({
+    //   replace: false
+    //  }),
     //cssnano
    ];
 
@@ -152,11 +132,21 @@ task('css', function (cb) {
 //browserify
 task("js_bro", function (cb) {
 
+  // var bundledStream = through();
+  //
+  // bundledStream
+  // .pipe(source('app.js'))
+  // .pipe(buffer())
+  // .pipe(sourcemaps.init({loadMaps: true}))
+  // .pipe(uglify())
+  // .pipe(sourcemaps.write('./'))
+  // .pipe(gulp.dest('./dist/js/'));
+
   var files = glob.sync("./src/js/*.js");
   files.map(function(entry) {
 
-    return browserify({ entries: entry })
-        .transform("babelify")
+    return browserify({ entries: entry, debug: true })
+        .transform("babelify",{presets: ["@babel/preset-env"]})
         .bundle()
         .pipe(source(entry))
         .pipe(rename(function(path){
@@ -166,7 +156,10 @@ task("js_bro", function (cb) {
               dirname: "./",
           }
         }))
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(gulpif(pro, uglify()))
+        .pipe(sourcemaps.write('./'))
         .pipe(dest('./dist/js/'));
   });
 
