@@ -7,7 +7,7 @@
 1、
 
 ```
-<meta name="viewport" content="width=device-width, initial-scale=2.0, maximum-scale=2.0, minimum-scale=2.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 ```
 2、
 
@@ -57,3 +57,15 @@ postcss-pxtorem  直接换算px为rem
 
 
 #### 或者通过media进行移动端布局
+
+
+###
+```javascript
+<script>
+  var _winWidth = document.documentElement.clientWidth || window.innerWidth,
+      _style = document.getElementsByTagName("html")[0].style;
+  _winWidth >= 750 ? _style.fontSize = "100px" : _style.fontSize = _winWidth / 7.5 + "px";
+</script>
+```
+
+### history

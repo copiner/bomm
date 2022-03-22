@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>pic</title>
+</head>
+<body>
+<div>
+  <label for="file">Choose a image to upload</label>
+  <input id="pic" type="file" accept="image/*" />
+  <br />
+  <textarea id="baseStr1"></textarea>
+  <br />
+  <textarea id="bina"></textarea>
+  <br />
+  <textarea id="baseStr2"></textarea>
+  <br />
+  <textarea id="baseStr"></textarea>
+  <br />
+  <img src="" id="bimg"/>
+</div>
+
+<script>
+
+
+function ab2str(buf) {
+  return String.fromCharCode.apply(null, new Uint16Array(buf));
+}
+
+//accept="image/jpeg, image/png, image/jpg"
+var fileInput = document.getElementById("pic");
+
+var baseStr = document.getElementById("baseStr");
+var bina = document.getElementById("bina");
+var bimg = document.getElementById("bimg");
+
+// //选择文件
+fileInput.addEventListener('change',function(){
+  //如果未传入文件则中断
+  if(fileInput.files[0] == undefined){
+      return;
+  }
+
+  var file = fileInput.files[0];
+
+  //FileReader可直接将上传文件转化为二进制流
+  var reader = new FileReader();
+
+  console.log(reader.readyState)
+  reader.addEventListener("loadend", function() {
+     console.log(reader.result)
+
+      console.log(ab2str(reader.result))
+
+  });
+  //reader.readAsDataURL(file);
+  reader.readAsArrayBuffer(file);
+
+})
+</script>
+
+
+
+<!-- Blob文件下载下载 -->
+<a id="h">点此进行下载</a>
+
+<script>
+  var blob = new Blob(["Hello World"]);
+  var url = window.URL.createObjectURL(blob);
+  var a = document.getElementById("h");
+  a.download = "helloworld.txt";
+  a.href = url;
+</script>
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>yeps</title>
+</head>
+<body>
+<script type="text/javascript">
+  /*
+  非整百年数除以4，无余为闰，有余不闰；
+  整百年数除以400，无余为闰，有余不闰。
+  */
+console.log(eht());
+function eht(){
+  var yyyymmdd = parseFloat(prompt("yyyyMMdd",20200401)) + '';
+
+  console.log(yyyymmdd);
+
+  var reg = /^[1-9]\d{7}$/;
+
+  // console.log(reg.test(yyyymmdd));
+
+  if(reg.test(yyyymmdd)){
+
+    var year = yyyymmdd.substring(0,4);
+    var mm = yyyymmdd.substring(4,6);
+    var dd = yyyymmdd.substring(6,8);
+
+    var flag = false;
+
+    //闰年：要么整百年份能够被400整除，要么非整百年份能被4整除（不能被100整除，且能被4整除）
+    if((year % 100 != 0 && year % 4 == 0) || year % 400 == 0){
+      flag = true;
+    }
+
+    if(Number(mm) >= 1 && Number(mm) <= 12){
+
+      if(mm == '02'){
+        if(flag){//闰年
+          if(Number(dd) >= 1 && Number(dd) <= 29){
+            return true;
+          }
+        } else {
+          if(Number(dd) >= 1 && Number(dd) <= 28){
+            return true;
+          }
+        }
+      } else if(
+        mm == '04' ||
+        mm == '06' ||
+        mm == '09' ||
+        mm == '11'
+      ){
+        if(Number(dd) >= 1 && Number(dd) <= 30){
+          return true;
+        }
+      } else {
+        if(Number(dd) >= 1 && Number(dd) <= 31){
+          return true;
+        }
+      }
+
+    } else {
+      return false;
+    }
+
+  } else {
+    return false;
+  }
+
+}
+
+</script>
+</body>
+</html>

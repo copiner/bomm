@@ -47,6 +47,9 @@ let env = process.env.NODE_ENV;
 let pro = env === 'production',
     dev = env === 'development';
 
+
+let url = "http://192.168.23.213:9001";
+
 task('scripts', function(cb) {
 
   return src('./lib/*.js')
@@ -229,13 +232,13 @@ task('build', series('clean', parallel('config','lib','css','js_bro','image_min'
 task('server',series('clean','watch',parallel('config','lib','css','js_bro','image_min'),'html',function(){
     connect.server({
         root: 'dist',
-        host:'192.168.1.77',
+        host:'127.0.0.1',
         port: 9000,
         livereload: true,
         middleware: function(connect, opt) {
             return [
                 proxy('/api',  {
-                    target: '',
+                    target: url,
                     changeOrigin:true,
                     headers: {
                          "Connection": "keep-alive"

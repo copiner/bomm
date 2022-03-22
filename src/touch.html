@@ -1,0 +1,176 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>HISTORY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<script src="./lib/jquery.min.js"></script>
+</head>
+<body>
+<div class="touch-con j_touch">
+  <div>
+    <ul class="j_touchul">
+      <li><a href="http://www.baidu.com">ROSE</a></li>
+      <li>JACK</li>
+      <li>MADY</li>
+      <li>ROSE</li>
+    </ul>
+  </div>
+</div>
+<script>
+var Touch = {
+  initData:function(){
+    var vConsole = new VConsole();
+    var ua = navigator.userAgent.toLocaleLowerCase();
+    console.log(ua);
+  },
+
+  initEvent:function(){
+    var div = document.querySelector('.j_touch');
+    var startx,starty,endx,endy;
+
+    div.addEventListener('touchstart',function(e){
+        startx=e.touches[0].pageX;  //获取触摸的X坐标。touches数组保存着多点触控的信息，这里只有一个点，所以为0
+        starty=e.touches[0].pageY;
+        //只触发一次
+        console.log("touchstart");
+        // console.log(e.touches);
+        // console.log(e.targetTouches);
+        //console.log(e.changeTouches);
+    })
+    div.addEventListener('touchmove',function(e){
+
+        // var w = x<0?x*-1:x;     //x轴的滑动值
+        // var h = y<0?y*-1:y;     //y轴的滑动值
+        // if(w>h){                //如果是在x轴中滑动
+        //    event.preventDefault();
+        // }
+
+        e.preventDefault();//阻止默认事件
+        //持续触发
+        console.log("touchmove");
+        //console.log(e.changeTouches);
+    })
+    // div.addEventListener('touchend',function(){
+    //     //只触发一次
+    //     console.log("touchend");
+    // })
+
+    //结束触控的时候绑定touchend事件
+    div.addEventListener('touchend', function(e){
+        endx = e.changedTouches[0].pageX;  //changedTouches为手指离开的信息
+        endy = e.changedTouches[0].pageY;
+        var deltax=endx-startx;  //取得触控后坐标的差值
+        var deltay=endy-starty;
+
+        var documentW = document.documentElement.clientWidth;
+        var documentH = document.documentElement.clientHeight;
+
+        if (Math.abs(deltax)<0.2*documentW && Math.abs(deltay)<0.1*documentH) {  //如果移动的距离小于0.3*设备宽度，则判定为不是滑动，退出（可以避免用户只是普通的点击造成的BUG）
+            return;
+        }
+
+        var ul = document.querySelector('.j_touchul');
+
+        if (Math.abs(deltax) >= Math.abs(deltay)) {  //如果为true，则说明这个滑动是在X轴方向
+            if(deltax>0){ //为true则为向右滑动
+              console.log('right: '+deltax);
+              ul.style.animation = "toright 0.5s linear 0s forwards";
+              // if(ul.style.-webkit-animation){
+              //   ul.style.-webkit-animation = "toright 1s";
+              // }
+              //ul.style.left = 0;
+            }else{  //向左滑动
+              console.log('left: '+deltax);
+              //ul.style.left = '-86px';
+              ul.style.animation = "toleft 0.5s linear 0s forwards";
+              // if(ul.style.-webkit-animation){
+              //   ul.style.-webkit-animation = "toleft 1s";
+              // }
+
+            }
+        }else{
+            if(deltay>0){//为true则向下滑动
+              console.log('down: '+deltay);
+            }else{  //向上滑动
+              console.log('up: '+deltay);
+            }
+        }
+    });
+
+
+    div.addEventListener('touchcancal',function(){
+        //触摸意外中断事件
+        console.log("touchcancal");
+    })
+
+  },
+
+  log:function(){
+    /*
+    clientX:65 // 触摸点在浏览器窗口中的横坐标
+    clientY:18 // 触摸点在浏览器窗口中的纵坐标
+    force:1 // 触摸点压力大小
+    identifier:0 // 触摸点唯一标识（ID）
+    pageX:65 // 触摸点在页面中的横坐标
+    pageY:18 // 触摸点在页面中的纵坐标
+    radiusX:11.5 // 触摸点椭圆的水平半径
+    radiusY:11.5 // 触摸点椭圆的垂直半径
+    rotationAngle:0 // 旋转角度
+    screenX:560 // 触摸点在屏幕中的横坐标
+    screenY:175 // 触摸点在屏幕中的纵坐标
+    */
+
+    //touchstart→touchmove→touchend
+    //touchstart→touchend→click
+    //如果在点击屏幕的时候手指滑动的话，是不会触发click事件的
+    //移动端click事件的触发条件就是必须touchstart和touchend同时触发才能触发click
+
+    /*
+    event.preventDefault()的方法，会阻止事件的默认行为。
+    可以通过调用preventDefault()方法，可以阻止后面事件的触发 例如
+    touchmove中添加event.preventDefault方法之后会阻止浏览器默认的滚动
+    */
+  },
+
+  bow : function(){
+    var browser = {
+      versions: function() {
+        var u = navigator.userAgent;
+        return {
+          trident: u.indexOf('Trident') > -1, //IE内核
+          presto: u.indexOf('Presto') > -1, //opera内核
+          webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+          gecko: u.indexOf('Firefox') > -1, //火狐内核Gecko
+          mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+          ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios
+          android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android
+          iPhone: u.indexOf('iPhone') > -1 , //iPhone
+          iPad: u.indexOf('iPad') > -1, //iPad
+          webApp: u.indexOf('Safari') > -1 //Safari
+        };
+      }
+    }
+    if (
+        browser.versions.mobile() ||
+        browser.versions.ios() ||
+        browser.versions.android() ||
+        browser.versions.iPhone() ||
+        browser.versions.iPad()
+      ){
+          alert('移动端');
+    }
+  },
+
+
+  init:function(){
+    Touch.initData();
+    Touch.initEvent()
+  }
+}
+Touch.init();
+
+</script>
+
+</body>
+</html>

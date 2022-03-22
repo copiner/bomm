@@ -9,8 +9,26 @@
 <script src="./lib/jquery.min.js"></script>
 </head>
 <body>
-<h1>name</h1>
+<h1 oncopy="alert('对不起，禁止复制！');return false;">name</h1>
+<h1 id="copy">copy</h1>
+<script>
+$(function(){
+    document.getElementById('copy').addEventListener('copy',function(e){
+        alert('10000')
+        e.preventDefault()
+    })
 
+    $('#copy').bind("cut copy paste",function(e) {
+        alert('10001')
+        e.preventDefault();
+    })
+
+    $('#copy').on("cut copy paste",function(e) {
+        alert('10002')
+        e.preventDefault();
+    })
+})
+</script>
 <!-- <p css-module="title">ABC</p> -->
 </body>
 </html>

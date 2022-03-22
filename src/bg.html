@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="./css/theme.css" id="bgTheme">
+    <!-- <link rel="stylesheet" href="./css/theme.css"> -->
+    <title>background</title>
+</head>
+<body>
+  <select class="j_bgoption">
+    <option value="01">B9D3EE</option>
+    <option value="02">B5B5B5</option>
+    <option value="03">B3EE3A</option>
+  </select>
+  <script>
+  document.querySelector('.j_bgoption').onchange = function(item){
+    console.log(item.target.value);
+    var stl = document.querySelector('#bgTheme');
+
+    switch (item.target.value) {
+      case "01":
+        stl.setAttribute('href','./css/theme.css')
+        break;
+      case "02":
+        stl.setAttribute('href','./css/theme1.css')
+        break;
+      case "03":
+        stl.setAttribute('href','./css/theme2.css')
+        break;
+      default:
+        stl.setAttribute('href','./css/theme.css')
+    }
+  }
+  //根据不同的企业用户加载不同的css
+  //document.querySelector('#bgTheme').setAttribute('href','./css/theme1.css');
+
+  // var select = document.getElementById('select');
+  // select.addEventListener('change',fun,false);//默认false，事件在冒泡阶段执行
+  // function fun(e){
+  // 	console.log(e.target.value);
+  // }
+  </script>
+  <script src="./js/bg.js"></script>
+</body>
+</html>

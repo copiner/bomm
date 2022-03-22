@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>BUBBLE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<body>
+<div id="bubblebox" style="height: 50px;width: 200px;overflow:scroll;background:pink;line-height:60px;">内容</div>
+
+<button id="bubbleTest" style="height: 30px;width: 200px;"></button>
+<button id="bubblebtn">触发</button>
+<button id="bubblebtn1">触发1</button>
+<button id="bubblebtn2">触发2</button>
+<button id="bubblebtn3">触发3</button>
+
+<script src="./js/bubble1.js"></script>
+<script src="./js/bubble2.js"></script>
+<script src="./js/bubble3.js"></script>
+<script src="./js/bubble4.js"></script>
+<script src="./js/bubble5.js"></script>
+<script src="./js/bubble6.js"></script>
+<pre>
+  关于冒泡，事件对象中包含bubbles、cancelBubble、stopPropagation()和stopImmediatePropagation()这四个属性和方法。
+
+  bubbles属性返回一个布尔值，表示当前事件是否会冒泡。该属性为只读属性。
+
+　发生在文档元素上的大部分事件都会冒泡，但focus、blur和scroll事件不会冒泡。所以，除了这三个事件bubbles属性返回了false外，其它事件该属性都为true
+
+  canceBubble属性只能用于阻止冒泡，无法阻止捕获阶段。该值可读写，默认值为false。当设置为true是，cancelBubble可以取消事件冒泡,该属性全浏览器支持，但并不是标准写法
+
+  stopPropagation()方法表示取消事件的进一步捕获或冒泡，无返回。不能阻止同一事件的其它监听函数被调用
+
+  stopImmediatePropagation()方法不仅可以取消事件的进一步捕获或冒泡，而且可以阻止同一个事件的其他监听函数被调用，无返回值
+
+  阻止事件冒泡的兼容性写法
+  <code>
+    var handler = function(e){
+        e = e || event;
+        if(e.stopPropagation){
+            e.stopPropagation();
+        }else{
+            e.cancelBubble = true;
+        }
+    }
+  </code>
+</pre>
+
+</body>
+</html>

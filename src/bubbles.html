@@ -1,0 +1,25 @@
+@@include('include/header.html')
+
+<div class="j_box" style="width: 100px;height: 100px; background-color: grey;">
+    <div class="j_box_con">
+      <a class="j_abc" href="http://www.baidu.com">ABCDEFGH</a>
+    </div>
+</div>
+
+
+<div id="grandFather" data-name="grandFather" style="width: 300px;height: 500px; background-color: red">
+   <p>grandFather</p>
+   <div id="father1" data-name="father1" style="width: 100px; height: 100px; background-color: pink">
+       <p>father1</p>
+       <div id="son1" data-name="son1" style="width: 50px; height: 50px; background-color: yellow">
+           <p>son1</p>
+       </div>
+   </div>
+   <div id="father2" data-name="father2" style="width: 100px;height: 100px; background-color: green">
+       <p>father2</p>
+   </div>
+</div>
+
+<script src="./js/bubbles.js"></script>
+
+@@include('include/footer.html')
