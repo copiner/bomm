@@ -1,63 +1,25 @@
-/*
-Written by wdaonngg@gmail.com in 2020-06-09
 
-postcss
-babel
-*/
 const { src, dest, task, series, parallel, watch, lastRun } = require('gulp');
 const { resolve } = require("path");
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const htmlmin = require('gulp-htmlmin');
-const imagemin = require('gulp-imagemin');
 const gulpif = require('gulp-if');
 const plumber = require('gulp-plumber');
 
 const connect = require('gulp-connect');
 const proxy = require('http-proxy-middleware');//反向代理
 
-const fileinclude = require('gulp-file-include');
 const del = require('del');
-const babel = require("gulp-babel");
-
-//postcss
-const postcss = require('gulp-postcss');
-const ppEnv = require('postcss-preset-env');
-const autoprefixer  = require('autoprefixer');
-const cssnano = require('cssnano');
-
-
-//const pxtorem = require('postcss-pxtorem');
-
-//browserify
-const browserify = require('browserify');
-const source = require('vinyl-source-stream');
-const buffer = require('vinyl-buffer');
-const glob = require('glob');
-const sourcemaps = require('gulp-sourcemaps');
-
 const rename = require('gulp-rename');
 
-const concat = require('gulp-concat');
+const rev = require('gulp-rev-append');
 
-
-// NODE_ENV
+//NODE_ENV
 let env = process.env.NODE_ENV;
 
 let pro = env === 'production',
     dev = env === 'development';
-
-
-let url = "http://192.168.23.213:9001";
-
-task('scripts', function(cb) {
-
-  return src('./lib/*.js')
-    .pipe(concat('all.js'))
-    .pipe(dest('./dist/'));
-    cb()
-
-});
 
 task('html', function (cb) {
 
@@ -70,10 +32,7 @@ task('html', function (cb) {
 
     src('./src/*.html')
     .pipe(plumber())
-    .pipe(fileinclude({
-        prefix: '@@',
-        basepath: '@file'
-      }))
+    .pipe(rev())
     .pipe(gulpif(pro, htmlmin(opt)))
     .pipe(dest('dist/'))
     .pipe(connect.reload());
@@ -100,82 +59,42 @@ task('config', function (cb) {
 })
 
 task('image_min', function (cb) {
-    src('src/imgs/*')
+    src('src/imgs/**')
     .pipe(plumber())
-    //.pipe(gulpif(pro, imagemin()))
     .pipe(dest('dist/imgs'));
     cb();
 });
 
 task('css', function (cb) {
 
-  var processors = [
-     ppEnv({//Can I Use
-      autoprefixer: { grid: true },
-      stage: 1,//0 1 2 3
-      features: {
-        'nesting-rules': true
-      }
-    }),
-    // pxtorem({
-    //   replace: false
-    //  }),
-    //cssnano
-   ];
-
     src('src/css/*.css')
     .pipe(plumber())
-    .pipe(postcss(processors))
     .pipe(gulpif(pro, cleanCSS()))
     .pipe(dest('dist/css'))
+    .pipe(connect.reload());
     cb();
 
 });
 
-//browserify
-task("js_bro", function (cb) {
 
-  // var bundledStream = through();
-  //
-  // bundledStream
-  // .pipe(source('app.js'))
-  // .pipe(buffer())
-  // .pipe(sourcemaps.init({loadMaps: true}))
-  // .pipe(uglify())
-  // .pipe(sourcemaps.write('./'))
-  // .pipe(gulp.dest('./dist/js/'));
+task("js_min", function (cb) {
 
-  var files = glob.sync("./src/js/*.js");
-  files.map(function(entry) {
+  src('src/js/*.js')
+  .pipe(plumber())
+  //.pipe(gulpif(pro, uglify()))
+  .pipe(dest('dist/js'))
+  .pipe(connect.reload());
+  cb();
 
-    return browserify({ entries: entry, debug: true })
-        .transform("babelify",{presets: ["@babel/preset-env"]})
-        .bundle()
-        .pipe(source(entry))
-        .pipe(rename(function(path){
-          return{
-              extname: '.js',
-              basename:path.basename,
-              dirname: "./",
-          }
-        }))
-        .pipe(buffer())
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(gulpif(pro, uglify()))
-        .pipe(sourcemaps.write('./'))
-        .pipe(dest('./dist/js/'));
-  });
-
-  cb()
 
 });
 
 task('watch', function(cb){//监控
 
   let watcher = watch(
-    ['./src/js/*.js','./src/css/*.css','./src/*.html','./src/include/*.html'],
+    ['./src/js/*.js','./src/css/*.css','./src/*.html'],
     {events:['change','add','unlink']},
-    parallel('css','js_bro','html')
+    parallel('css','js_min','html')
   );
 
   watcher.on('change', function(path, stats) {
@@ -220,7 +139,7 @@ task('clean', () => {
 
 
 //生产环境
-task('build', series('clean', parallel('config','lib','css','js_bro','image_min'),'html',function(cb){
+task('build', series('clean', parallel('config','lib','css','js_min','image_min'),'html',function(cb){
   console.log(`
       -----------------------------
         build tasks are successful
@@ -229,7 +148,7 @@ task('build', series('clean', parallel('config','lib','css','js_bro','image_min'
 }));
 
 //开发环境
-task('server',series('clean','watch',parallel('config','lib','css','js_bro','image_min'),'html',function(){
+task('server',series('clean','watch',parallel('config','lib','css','js_min','image_min'),'html',function(){
     connect.server({
         root: 'dist',
         host:'127.0.0.1',
@@ -238,7 +157,7 @@ task('server',series('clean','watch',parallel('config','lib','css','js_bro','ima
         middleware: function(connect, opt) {
             return [
                 proxy('/api',  {
-                    target: url,
+                    target: "http://10.10.10.10:9000",
                     changeOrigin:true,
                     headers: {
                          "Connection": "keep-alive"

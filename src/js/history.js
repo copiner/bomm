@@ -31,13 +31,15 @@ popstate()
 */
 
 function barEvent(){
-  console.log('CURRENT', history.state);
+  console.log('barEvent: ', history.state);
 }
 
 function headEvent(){
-  console.log('CURRENT', history.state);
+  console.log('headEvent: ', history.state);
 }
-
+function curEvent(){
+  console.log('curEvent: ', history.state);
+}
 
 $(".history").on('click','input',function(e){
 
@@ -58,9 +60,16 @@ $(".history").on('click','input',function(e){
       history.pushState({flag:"bar"},"grid","bar.html");
       barEvent();
       break;
+    case 'PUSHSTATE2':
+      history.pushState({flag:"bar2"},"grid","bar2.html");
+      barEvent();
+      break;
     case 'REPLACESTATE':
       history.replaceState({flag:"head"},"grid","head.html");
       headEvent();
+      break;
+    case 'HISTORY':
+      curEvent();
       break;
     default:
       history.replaceState({flag:"history"},"history","history.html");
