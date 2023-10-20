@@ -153,6 +153,7 @@ task('server',series('clean','watch',parallel('config','lib','css','js_min','ima
         root: 'dist',
         host:'127.0.0.1',
         port: 9000,
+        // fallback:"historyRouter.html",
         livereload: true,
         middleware: function(connect, opt) {
             return [
