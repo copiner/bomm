@@ -162,15 +162,9 @@ task('server',series('clean','watch',parallel('config','lib','css','js_min','ima
                     headers: {
                          "Connection": "keep-alive"
                      },
-                    //ws: true,
+                    ws: true,
                     pathRewrite: {
                         '^/api' : ''
-                    },
-                    router: {
-                      // 'integration.localhost:3000' : 'http://localhost:8001',  // host only
-                      // 'staging.localhost:3000'     : 'http://localhost:8002',  // host only
-                      // 'localhost:3000/api'         : 'http://localhost:8003',  // host + path
-                      // '/rest'                      : 'http://localhost:8004'   // path only
                     }
                 })
             ]
